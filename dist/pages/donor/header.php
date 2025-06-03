@@ -11,11 +11,11 @@ if(!isset($_SESSION['user_id'])){
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>Donation | Dashboard</title>
+      <title>Donation Platform | Donor Dashboard</title>
       <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="Feedback Dashboard" />
-    <meta name="author" content="Dynes Datius" />
+    <meta name="title" content="Donation Platform Donor Dashboard" />
+    <meta name="author" content="Donation Platform" />
     
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->

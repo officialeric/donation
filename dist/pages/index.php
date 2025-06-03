@@ -9,9 +9,25 @@
       <?php
        include '../includes/connection.php';
 
-        $sql = "SELECT * FROM users WHERE role = 'donor'";
-        $donors = mysqli_query($db, $sql);
-        $total_donors = mysqli_num_rows($donors);
+        // Get total donors
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'donor'";
+        $result = mysqli_query($db, $sql);
+        $total_donors = mysqli_fetch_assoc($result)['total'];
+
+        // Get total donations
+        $sql = "SELECT COUNT(*) as total FROM donations";
+        $result = mysqli_query($db, $sql);
+        $total_donations = mysqli_fetch_assoc($result)['total'];
+
+        // Get total orphanages
+        $sql = "SELECT COUNT(*) as total FROM orphanages WHERE status = 'active'";
+        $result = mysqli_query($db, $sql);
+        $total_orphanages = mysqli_fetch_assoc($result)['total'];
+
+        // Get total donation amount
+        $sql = "SELECT SUM(amount) as total FROM donations WHERE payment_status = 'completed'";
+        $result = mysqli_query($db, $sql);
+        $total_amount = mysqli_fetch_assoc($result)['total'] ?? 0;
       ?>
 
       <!--begin::App Main-->
@@ -42,12 +58,12 @@
             <!--begin::Row-->
             <div class="row">
               <!--begin::Col-->
-              <div class="col-lg-3 col-6">
+              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <!--begin::Small Box Widget 1-->
                 <div class="small-box text-bg-primary">
                   <div class="inner">
-                    <h3>12</h3>
-                    <p>Donations</p>
+                    <h3><?= $total_donations ?></h3>
+                    <p>Total Donations</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -70,12 +86,12 @@
                 <!--end::Small Box Widget 1-->
               </div>
               <!--end::Col-->
-              <div class="col-lg-3 col-6">
+              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <!--begin::Small Box Widget 2-->
                 <div class="small-box text-bg-success">
                   <div class="inner">
-                    <h3><?=$total_donors?></h3>
-                    <p>Donors</p>
+                    <h3><?= $total_donors ?></h3>
+                    <p>Total Donors</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -98,12 +114,12 @@
                 <!--end::Small Box Widget 2-->
               </div>
               <!--end::Col-->
-              <div class="col-lg-3 col-6">
+              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <!--begin::Small Box Widget 3-->
                 <div class="small-box text-bg-warning">
                   <div class="inner">
-                    <h3>44</h3>
-                    <p>Vituo</p>
+                    <h3><?= $total_orphanages ?></h3>
+                    <p>Orphanages</p>
                   </div>
                   <svg
                     class="small-box-icon"
@@ -126,7 +142,40 @@
                 <!--end::Small Box Widget 3-->
               </div>
               <!--end::Col-->
-              
+              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <!--begin::Small Box Widget 4-->
+                <div class="small-box text-bg-info">
+                  <div class="inner">
+                    <h3>$<?= number_format($total_amount, 2) ?></h3>
+                    <p>Total Raised</p>
+                  </div>
+                  <svg
+                    class="small-box-icon"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <a
+                    href="donations.php"
+                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
+                  >
+                    More info <i class="bi bi-link-45deg"></i>
+                  </a>
+                </div>
+                <!--end::Small Box Widget 4-->
+              </div>
+              <!--end::Col-->
+
             </div>
             <!--end::Row-->
           </div>

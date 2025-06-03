@@ -1,20 +1,24 @@
+<?php
+session_start();
+include 'dist/includes/connection.php';
+?>
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Donation | Login Page</title>
+    <title>Donation Platform | Support Orphanages</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="AdminLTE 4 | Login Page" />
-    <meta name="author" content="ColorlibHQ" />
+    <meta name="title" content="Donation Platform | Support Orphanages" />
+    <meta name="author" content="Donation Platform" />
     <meta
       name="description"
-      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS."
+      content="Support orphanages by making donations. Browse through our list of verified orphanages and make a difference in children's lives."
     />
     <meta
       name="keywords"
-      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"
+      content="donation, orphanage, charity, children, support, help, donate"
     />
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
@@ -25,14 +29,6 @@
       crossorigin="anonymous"
     />
     <!--end::Fonts-->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css"
-      integrity="sha256-tZHrRjVqNSRyWg2wbppGnT833E/Ys0DHWGwT04GiqQg="
-      crossorigin="anonymous"
-    />
-    <!--end::Third Party Plugin(OverlayScrollbars)-->
     <!--begin::Third Party Plugin(Bootstrap Icons)-->
     <link
       rel="stylesheet"
@@ -44,70 +40,146 @@
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="dist/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
+    <style>
+      .orphanage-card {
+        transition: transform 0.2s;
+      }
+      .orphanage-card:hover {
+        transform: translateY(-5px);
+      }
+      .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 0;
+      }
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->
-  <body class="login-page bg-body-secondary">
-    <div class="login-box">
-      <div class="login-logo">
-        <a href=""><b>Donat</b>ion</a>
-      </div>
-      <!-- /.login-logo -->
-      <div class="card">
-        <div class="card-body login-card-body">
-          <p class="login-box-msg">Sign in to start your session</p>
+  <body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="index.php">
+          <i class="bi bi-heart-fill me-2"></i>Donation Platform
+        </a>
 
-          <?php if(isset($_GET['info'])) { ?>
-          <p class="login-box-msg text-success"><?= $_GET['info'] ?></p>
-          <?php }else if(isset($_GET['error'])) { ?>
-            
-            <p class="login-box-msg text-danger"><?= $_GET['error'] ?></p>
-            <?php } ?>
-
-          <form action="dist/includes/auth.php" method="post">
-            <div class="input-group mb-3">
-              <input type="email" class="form-control" placeholder="Email" name="email"/>
-              <div class="input-group-text"><span class="bi bi-envelope"></span></div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="password" class="form-control" placeholder="Password" name="password"/>
-              <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
-            </div>
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-8">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                  <label class="form-check-label" for="flexCheckDefault"> Remember Me </label>
-                </div>
-              </div>
-              <!-- /.col -->
-              <div class="col-4">
-                <div class="d-grid gap-2">
-                  <button type="submit" name="login" class="btn btn-primary">Sign In</button>
-                </div>
-              </div>
-              <!-- /.col -->
-            </div>
-            <!--end::Row-->
-          </form>
-         
-          <!-- /.social-auth-links -->
-          <p class="mb-0">
-            <a href="register.php" class="text-center"> Register a new account </a>
-          </p>
+        <div class="navbar-nav ms-auto">
+          <?php if(isset($_SESSION['user_id'])): ?>
+            <span class="navbar-text me-3">Welcome, <?= $_SESSION['username'] ?>!</span>
+            <?php if($_SESSION['role'] == 'admin'): ?>
+              <a href="dist/pages/index.php" class="btn btn-outline-light me-2">Admin Dashboard</a>
+            <?php else: ?>
+              <a href="dist/pages/donor/index.php" class="btn btn-outline-light me-2">My Dashboard</a>
+            <?php endif; ?>
+            <form action="dist/includes/auth.php" method="post" class="d-inline">
+              <button type="submit" name="logout" class="btn btn-outline-light">Logout</button>
+            </form>
+          <?php else: ?>
+            <a href="login.php" class="btn btn-outline-light me-2">Login</a>
+            <a href="register.php" class="btn btn-light">Register</a>
+          <?php endif; ?>
         </div>
-        <!-- /.login-card-body -->
       </div>
-    </div>
-    <!-- /.login-box -->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <script
-      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"
-      integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ="
-      crossorigin="anonymous"
-    ></script>
-    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+      <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Make a Difference Today</h1>
+        <p class="lead mb-4">Support orphanages and help children build a brighter future. Every donation counts.</p>
+
+        <?php if(isset($_GET['info'])) { ?>
+        <div class="alert alert-success d-inline-block"><?= $_GET['info'] ?></div>
+        <?php } else if(isset($_GET['error'])) { ?>
+        <div class="alert alert-danger d-inline-block"><?= $_GET['error'] ?></div>
+        <?php } ?>
+      </div>
+    </section>
+
+    <!-- Orphanages Section -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center mb-5">
+            <h2 class="fw-bold">Our Partner Orphanages</h2>
+            <p class="text-muted">Choose an orphanage to support and make a donation</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <?php
+            $sql = "SELECT * FROM orphanages WHERE status = 'active' ORDER BY name";
+            $result = mysqli_query($db, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+              while($orphanage = mysqli_fetch_assoc($result)) {
+          ?>
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card orphanage-card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title text-primary"><?= htmlspecialchars($orphanage['name']) ?></h5>
+                <p class="card-text">
+                  <i class="bi bi-geo-alt text-muted me-1"></i>
+                  <?= htmlspecialchars($orphanage['location']) ?>
+                </p>
+                <p class="card-text"><?= htmlspecialchars(substr($orphanage['description'], 0, 120)) ?>...</p>
+
+                <div class="mt-3">
+                  <p class="mb-1"><strong>Contact:</strong> <?= htmlspecialchars($orphanage['contact_person']) ?></p>
+                  <p class="mb-1"><i class="bi bi-telephone me-1"></i> <?= htmlspecialchars($orphanage['contact_phone']) ?></p>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent">
+                <div class="d-grid gap-2">
+                  <a href="orphanage-details.php?id=<?= $orphanage['id'] ?>" class="btn btn-outline-primary">View Details</a>
+                  <?php if(isset($_SESSION['user_id'])): ?>
+                    <a href="make-donation.php?orphanage_id=<?= $orphanage['id'] ?>" class="btn btn-primary">
+                      <i class="bi bi-heart-fill me-1"></i>Donate Now
+                    </a>
+                  <?php else: ?>
+                    <a href="register.php?redirect=make-donation.php?orphanage_id=<?= $orphanage['id'] ?>" class="btn btn-primary">
+                      <i class="bi bi-heart-fill me-1"></i>Register to Donate
+                    </a>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php
+              }
+            } else {
+          ?>
+          <div class="col-12 text-center">
+            <div class="alert alert-info">
+              <h4>No orphanages available at the moment</h4>
+              <p>Please check back later or contact the administrator.</p>
+            </div>
+          </div>
+          <?php } ?>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Donation Platform</h5>
+            <p class="mb-0">Making a difference in children's lives, one donation at a time.</p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="mb-0">&copy; 2025 Donation Platform. All rights reserved.</p>
+            <?php if(isset($_SESSION['user_id']) && $_SESSION['role'] == 'admin'): ?>
+              <small><a href="dist/pages/index.php" class="text-light">Admin Panel</a></small>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!--begin::Required Plugin(popperjs for Bootstrap 5)-->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -121,29 +193,7 @@
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="dist/js/adminlte.js"></script>
-    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
-      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-      const Default = {
-        scrollbarTheme: 'os-theme-light',
-        scrollbarAutoHide: 'leave',
-        scrollbarClickScroll: true,
-      };
-      document.addEventListener('DOMContentLoaded', function () {
-        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-        if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
-          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-            scrollbars: {
-              theme: Default.scrollbarTheme,
-              autoHide: Default.scrollbarAutoHide,
-              clickScroll: Default.scrollbarClickScroll,
-            },
-          });
-        }
-      });
-    </script>
-    <!--end::OverlayScrollbars Configure-->
-    <!--end::Script-->
+    <!--end::Required Plugin(AdminLTE)-->
   </body>
   <!--end::Body-->
 </html>

@@ -3,15 +3,11 @@
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
           <a href="index.php" class="brand-link">
-            <!--begin::Brand Image-->
-            <img
-              src="../assets/img/AdminLTELogo.png"
-              alt="AdminLTE Logo"
-              class="brand-image opacity-75 shadow"
-            />
-            <!--end::Brand Image-->
+            <!--begin::Brand Icon-->
+            <i class="bi bi-heart-fill brand-image text-danger" style="font-size: 2rem; margin-right: 0.5rem;"></i>
+            <!--end::Brand Icon-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">Donation</span>
+            <span class="brand-text fw-bold">Donation Platform</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -31,34 +27,50 @@
                 $current_page = basename($_SERVER['PHP_SELF']);
               ?>
               <li class="nav-item menu-open">
-                <a href="index.php" class="nav-link<?php echo ($current_page == 'index.php') ? '' : ' active'; ?>">
-                  <i class="nav-icon bi bi-speedometer"></i>
+                <a href="index.php" class="nav-link<?php echo ($current_page == 'index.php') ? ' active' : ''; ?>">
+                  <i class="nav-icon bi bi-speedometer2"></i>
                   <p>
                     Dashboard
                   </p>
                 </a>
               </li>
               <li class="nav-item menu-open">
-                <a href="vituo.php" class="nav-link<?php echo ($current_page == 'vituo.php') ? '' : ' active'; ?>">
-                  <i class="nav-icon bi bi-speedometer"></i>
+                <a href="vituo.php" class="nav-link<?php echo ($current_page == 'vituo.php') ? ' active' : ''; ?>">
+                  <i class="nav-icon bi bi-house-heart"></i>
                   <p>
-                    Vituo
+                    Orphanages
                   </p>
                 </a>
               </li>
               <li class="nav-item menu-open">
-                <a href="donors.php" class="nav-link<?php echo ($current_page == 'donors.php') ? '' : ' active'; ?>">
-                  <i class="nav-icon bi bi-speedometer"></i>
+                <a href="donors.php" class="nav-link<?php echo ($current_page == 'donors.php') ? ' active' : ''; ?>">
+                  <i class="nav-icon bi bi-people"></i>
                   <p>
                     Donors
                   </p>
                 </a>
               </li>
               <li class="nav-item menu-open">
-                <a href="donations.php" class="nav-link<?php echo ($current_page == 'donations.php') ? '' : ' active'; ?>">
-                  <i class="nav-icon bi bi-speedometer"></i>
+                <a href="donations.php" class="nav-link<?php echo ($current_page == 'donations.php') ? ' active' : ''; ?>">
+                  <i class="nav-icon bi bi-heart-fill"></i>
                   <p>
                     Donations
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item menu-open">
+                <a href="admin/orphanages.php" class="nav-link">
+                  <i class="nav-icon bi bi-gear"></i>
+                  <p>
+                    Manage Orphanages
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item menu-open">
+                <a href="../../index.php" class="nav-link" target="_blank">
+                  <i class="nav-icon bi bi-globe"></i>
+                  <p>
+                    View Public Site
                   </p>
                 </a>
               </li>

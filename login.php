@@ -3,17 +3,14 @@
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Donation | Register Page</title>
+    <title>Donation Platform | Login</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="ColorlibHQ" />
+    <meta name="title" content="Donation Platform | Login" />
+    <meta name="author" content="Donation Platform" />
     <meta
       name="description"
-      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS."
-    />
-    <meta
-      name="keywords"
-      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"
+      content="Login to the Donation Platform to make donations to orphanages."
     />
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
@@ -49,32 +46,28 @@
   <body class="login-page bg-body-secondary">
     <div class="login-box">
       <div class="login-logo">
-        <a href=""><b>Donat</b>ion</a>
+        <a href="index.php"><b>Donat</b>ion Platform</a>
       </div>
       <!-- /.login-logo -->
       <div class="card">
         <div class="card-body login-card-body">
-          <p class="login-box-msg">Sign Up</p>
-          <?php if(isset($_GET['error'])) : ?>
-          <p class="login-box-msg mb-3 text-danger"><?=$_GET['error']  ?></p>
-          <?php endif ?>
-          <form action="dist/includes/auth.php" method="post">
-              <?php if(isset($_GET['redirect'])) { ?>
-              <input type="hidden" name="redirect" value="<?= htmlspecialchars($_GET['redirect']) ?>">
-              <?php } ?>
+          <p class="login-box-msg">Sign in to make a donation</p>
 
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Username" name="username" required/>
-                <div class="input-group-text"><span class="bi bi-people"></span></div>
-              </div>
-              <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Email" name="email" required/>
-                <div class="input-group-text"><span class="bi bi-envelope"></span></div>
-              </div>
-              <div class="input-group mb-3">
-                <input type="tel" class="form-control" placeholder="Phone" name="phone" required/>
-                <div class="input-group-text"><span class="bi bi-phone"></span></div>
-              </div>
+          <?php if(isset($_GET['info'])) { ?>
+          <p class="login-box-msg text-success"><?= $_GET['info'] ?></p>
+          <?php } else if(isset($_GET['error'])) { ?>
+          <p class="login-box-msg text-danger"><?= $_GET['error'] ?></p>
+          <?php } ?>
+
+          <form action="dist/includes/auth.php" method="post">
+            <?php if(isset($_GET['redirect'])) { ?>
+            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_GET['redirect']) ?>">
+            <?php } ?>
+            
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" placeholder="Email" name="email" required/>
+              <div class="input-group-text"><span class="bi bi-envelope"></span></div>
+            </div>
             <div class="input-group mb-3">
               <input type="password" class="form-control" placeholder="Password" name="password" required/>
               <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -82,13 +75,15 @@
             <!--begin::Row-->
             <div class="row">
               <div class="col-8">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                  <label class="form-check-label" for="flexCheckDefault"> Remember Me </label>
+                </div>
               </div>
               <!-- /.col -->
               <div class="col-4">
                 <div class="d-grid gap-2">
-                  <button type="submit" name="register" class="btn btn-primary">
-                    Register
-                  </button>
+                  <button type="submit" name="login" class="btn btn-primary">Sign In</button>
                 </div>
               </div>
               <!-- /.col -->
@@ -101,7 +96,7 @@
             <a href="index.php" class="text-center">← Back to Orphanages</a>
           </p>
           <p class="mb-0">
-            <a href="login.php<?= isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : '' ?>" class="text-center">Already have an account? Login</a>
+            <a href="register.php<?= isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : '' ?>" class="text-center">Register a new account</a>
           </p>
         </div>
         <!-- /.login-card-body -->
@@ -128,29 +123,7 @@
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="dist/js/adminlte.js"></script>
-    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
-      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-      const Default = {
-        scrollbarTheme: 'os-theme-light',
-        scrollbarAutoHide: 'leave',
-        scrollbarClickScroll: true,
-      };
-      document.addEventListener('DOMContentLoaded', function () {
-        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-        if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
-          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-            scrollbars: {
-              theme: Default.scrollbarTheme,
-              autoHide: Default.scrollbarAutoHide,
-              clickScroll: Default.scrollbarClickScroll,
-            },
-          });
-        }
-      });
-    </script>
-    <!--end::OverlayScrollbars Configure-->
-    <!--end::Script-->
+    <!--end::Required Plugin(AdminLTE)-->
   </body>
   <!--end::Body-->
 </html>

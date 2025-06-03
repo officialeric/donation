@@ -35,13 +35,19 @@ if(isset($_POST['register'])){
             // hashing the password
             $hashed_password = password_hash($password , PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO users(username,email,phone,password) VALUES('$username','$email','$phone','$hashed_password')";
+            $sql = "INSERT INTO users(username,email,phone,password,role) VALUES('$username','$email','$phone','$hashed_password','donor')";
             $result = mysqli_query($db,$sql);
 
             if($result){
-                header(header: 'location: ../../index.php?info=Registered Successfully , Now Login!');
+                // Check if there's a donation redirect
+                $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '';
+                if (!empty($redirect)) {
+                    header('location: ../../login.php?info=Registered Successfully! Please login to continue.&redirect=' . urlencode($redirect));
+                } else {
+                    header('location: ../../login.php?info=Registered Successfully! Please login to continue.');
+                }
             }else{
-                header(header: 'location: ../../register.php?error=Something went wrong!');
+                header('location: ../../register.php?error=Something went wrong!');
             }
         }
         
@@ -63,17 +69,17 @@ if(isset($_POST['login'])){
     $password = validate($_POST['password']);
 
     if(empty($email)){
-        header('location: ../../index.php?error=Email is required!');
+        header('location: ../../login.php?error=Email is required!');
     }else if(empty($password)){
-        header('location: ../../index.php?error=Password is required!');
+        header('location: ../../login.php?error=Password is required!');
     }else{
-        
+
         if(!isUserExists($email)){
-            header(header: 'location: ../../index.php?error=User Not Exists , Please Go Register!');
+            header('location: ../../login.php?error=User Not Exists , Please Go Register!');
         }else{
 
             $fetch_user = "SELECT *
-                            FROM users 
+                            FROM users
                             WHERE email = '$email'";
 
             $logged_in_user = mysqli_query($db, $fetch_user);
@@ -81,7 +87,7 @@ if(isset($_POST['login'])){
            $user = mysqli_fetch_assoc($logged_in_user);
 
            if (!password_verify($password, $user['password'])) {
-            header(header: 'location: ../../index.php?error=Incorrect Password!');
+            header('location: ../../login.php?error=Incorrect Password!');
            }else{
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['email'] = $user['email'];
@@ -89,9 +95,15 @@ if(isset($_POST['login'])){
                 $_SESSION['phone'] = $user['phone'];
                 $_SESSION['role'] = $user['role'];
 
-                $location = ($_SESSION['role'] == 'admin' ? '../pages/index.php' : '../pages/donor/index.php');
+                // Check for redirect parameter
+                $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '';
 
-                header(header: 'location:' . $location . '?info=Login successfully');
+                if (!empty($redirect)) {
+                    header('location: ../../' . $redirect);
+                } else {
+                    $location = ($_SESSION['role'] == 'admin' ? 'dist/pages/index.php' : 'dist/pages/donor/index.php');
+                    header('location: ../../' . $location . '?info=Login successfully');
+                }
            }
         }
         
