@@ -11,11 +11,16 @@ if(!isset($_SESSION['user_id'])){
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>Donation Platform | Admin Dashboard</title>
+      <title>TumainiFuraha | Admin Dashboard</title>
+      <!--begin::Favicon-->
+      <link rel="icon" type="image/svg+xml" href="../images/logo-simple.svg">
+      <link rel="alternate icon" href="../images/logo-simple.svg">
+      <link rel="mask-icon" href="../images/logo-simple.svg" color="#667eea">
+      <!--end::Favicon-->
       <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="Donation Platform Admin Dashboard" />
-    <meta name="author" content="Donation Platform" />
+    <meta name="title" content="TumainiFuraha Admin Dashboard" />
+    <meta name="author" content="TumainiFuraha" />
     
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->

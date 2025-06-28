@@ -7,14 +7,19 @@ include 'dist/includes/connection.php';
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Donation Platform | Support Orphanages</title>
+    <title>TumainiFuraha | Hope and Joy for Every Child</title>
+    <!--begin::Favicon-->
+    <link rel="icon" type="image/svg+xml" href="dist/images/logo-simple.svg">
+    <link rel="alternate icon" href="dist/images/logo-simple.svg">
+    <link rel="mask-icon" href="dist/images/logo-simple.svg" color="#667eea">
+    <!--end::Favicon-->
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="Donation Platform | Support Orphanages" />
-    <meta name="author" content="Donation Platform" />
+    <meta name="title" content="TumainiFuraha | Hope and Joy for Every Child" />
+    <meta name="author" content="TumainiFuraha" />
     <meta
       name="description"
-      content="Support orphanages by making donations. Browse through our list of verified orphanages and make a difference in children's lives."
+      content="TumainiFuraha - Bringing hope and joy to orphanages. Support verified orphanages and make a meaningful difference in children's lives across East Africa."
     />
     <meta
       name="keywords"
@@ -48,9 +53,44 @@ include 'dist/includes/connection.php';
         transform: translateY(-5px);
       }
       .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: url('dist/assets/images/hero_p.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
         color: white;
-        padding: 4rem 0;
+        padding: 6rem 0;
+        position: relative;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+      }
+
+      /* Fallback for when image is not available */
+      .hero-section.fallback {
+        background: linear-gradient(rgba(52, 152, 219, 0.85), rgba(155, 89, 182, 0.75)),
+                    url('dist/assets/images/hero-pattern.svg') center/cover no-repeat;
+      }
+
+      /* Enhanced text readability */
+      .hero-section .hero-content {
+        position: relative;
+        z-index: 2;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+
+      .hero-section .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+      }
+
+      .hero-section .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        opacity: 0.95;
       }
     </style>
   </head>
@@ -60,8 +100,9 @@ include 'dist/includes/connection.php';
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="index.php">
-          <i class="bi bi-heart-fill me-2"></i>Donation Platform
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="index.php">
+          <img src="dist/images/logo-simple.svg" alt="TumainiFuraha Logo" width="40" height="40" class="me-2">
+          <span>TumainiFuraha</span>
         </a>
 
         <div class="navbar-nav ms-auto">
@@ -86,14 +127,25 @@ include 'dist/includes/connection.php';
     <!-- Hero Section -->
     <section class="hero-section text-center">
       <div class="container">
-        <h1 class="display-4 fw-bold mb-4">Make a Difference Today</h1>
-        <p class="lead mb-4">Support orphanages and help children build a brighter future. Every donation counts.</p>
+        <div class="hero-content">
+          <h1 class="hero-title">Make a Difference Today</h1>
+          <p class="hero-subtitle">Support orphanages and help children build a brighter future. Every donation counts and creates lasting impact in young lives.</p>
 
-        <?php if(isset($_GET['info'])) { ?>
-        <div class="alert alert-success d-inline-block"><?= $_GET['info'] ?></div>
-        <?php } else if(isset($_GET['error'])) { ?>
-        <div class="alert alert-danger d-inline-block"><?= $_GET['error'] ?></div>
-        <?php } ?>
+          <?php if(isset($_GET['info'])) { ?>
+          <div class="alert alert-success d-inline-block"><?= $_GET['info'] ?></div>
+          <?php } else if(isset($_GET['error'])) { ?>
+          <div class="alert alert-danger d-inline-block"><?= $_GET['error'] ?></div>
+          <?php } ?>
+
+          <div class="mt-4">
+            <a href="#orphanages" class="btn btn-primary btn-lg me-3" style="background: linear-gradient(135deg, #3498db, #9b59b6); border: none; border-radius: 25px; padding: 12px 30px; font-weight: 600; text-shadow: none;">
+              <i class="bi bi-heart-fill me-2"></i>Start Donating
+            </a>
+            <a href="#about" class="btn btn-outline-light btn-lg" style="border: 2px solid white; border-radius: 25px; padding: 10px 25px; font-weight: 600; text-shadow: none;">
+              <i class="bi bi-info-circle me-2"></i>Learn More
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 

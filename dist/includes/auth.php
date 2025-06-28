@@ -18,6 +18,7 @@ if(isset($_POST['register'])){
     $phone = validate($_POST['phone']);
     $password = validate($_POST['password']);
 
+
     if(empty($username)){
         header('location: ../../register.php?error=username is required!');
     }else if(empty($email)){
@@ -35,7 +36,7 @@ if(isset($_POST['register'])){
             // hashing the password
             $hashed_password = password_hash($password , PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO users(username,email,phone,password,role) VALUES('$username','$email','$phone','$hashed_password','donor')";
+            $sql = "INSERT INTO users(username,first_name,middle_name,last_name,email,phone,password,role) VALUES('$username', ' ', ' ',' ','$email','$phone','$hashed_password','donor')";
             $result = mysqli_query($db,$sql);
 
             if($result){

@@ -1,6 +1,6 @@
 <?php
 
-include '../../includes/connection.php';
+include '../includes/connection.php';
 ?>
 
 <!DOCTYPE html>
@@ -16,27 +16,27 @@ include '../../includes/connection.php';
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
     />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css" />
     <!-- Theme style -->
-    <link rel="stylesheet" href="../../css/adminlte.min.css" />
+    <link rel="stylesheet" href="../css/adminlte.min.css" />
     <!-- DataTables -->
-    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
-    <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
-    <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css" />
+    <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css" />
   </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
       <!-- Navbar -->
-      <?php include '../header.php'; 
+      <?php include 'header.php'; 
       if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-  header('Location: ../../../index.php');
+  header('Location: ../../index.php');
   exit;
 }
       ?>
       <!-- /.navbar -->
 
       <!-- Main Sidebar Container -->
-      <?php include '../sidebar.php'; ?>
+      <?php include 'sidebar.php'; ?>
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -66,8 +66,11 @@ include '../../includes/connection.php';
                   <div class="card-header">
                     <h3 class="card-title">Orphanages List</h3>
                     <div class="card-tools">
+                      <a href="add-orphanage.php" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Add Orphanage (Page)
+                      </a>
                       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-orphanage-modal">
-                        <i class="fas fa-plus"></i> Add New Orphanage
+                        <i class="fas fa-plus"></i> Add Orphanage (Modal)
                       </button>
                     </div>
                   </div>
@@ -119,6 +122,9 @@ include '../../includes/connection.php';
                                     <a href='edit-orphanage.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
                                       <i class='fas fa-edit'></i> Edit
                                     </a>
+                                    <a href='campaigns.php?orphanage_id=" . $row['id'] . "' class='btn btn-success btn-sm'>
+                                      <i class='fas fa-megaphone'></i> Campaigns
+                                    </a>
                                     <button type='button' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#delete-orphanage-modal' data-id='" . $row['id'] . "'>
                                       <i class='fas fa-trash'></i> Delete
                                     </button>
@@ -143,7 +149,7 @@ include '../../includes/connection.php';
       </div>
       <!-- /.content-wrapper -->
       
-      <?php include '../footer.php'; ?>
+      <?php include 'footer.php'; ?>
 
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark">
@@ -163,7 +169,7 @@ include '../../includes/connection.php';
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form action="../../includes/process-orphanage.php" method="post">
+          <form action="../includes/process-orphanage.php" method="post">
             <div class="modal-body">
               <div class="form-group">
                 <label for="name">Orphanage Name</label>
@@ -191,7 +197,14 @@ include '../../includes/connection.php';
               </div>
               <div class="form-group">
                 <label for="bank_account">Bank Account Details</label>
-                <textarea class="form-control" id="bank_account" name="bank_account" rows="2" required></textarea>
+                <textarea class="form-control" id="bank_account" name="bank_account" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select class="form-control" id="status" name="status">
+                  <option value="active" selected>Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
               </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -216,7 +229,7 @@ include '../../includes/connection.php';
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form action="../../includes/process-orphanage.php" method="post">
+          <form action="../includes/process-orphanage.php" method="post">
             <div class="modal-body">
               <p>Are you sure you want to delete this orphanage?</p>
               <p class="text-warning">This action cannot be undone.</p>
@@ -235,24 +248,24 @@ include '../../includes/connection.php';
     <!-- /.modal -->
 
     <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables & Plugins -->
-    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="../../plugins/jszip/jszip.min.js"></script>
-    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../plugins/jszip/jszip.min.js"></script>
+    <script src="../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="../../js/adminlte.min.js"></script>
+    <script src="../js/adminlte.min.js"></script>
     <!-- Page specific script -->
     <script>
       $(function () {

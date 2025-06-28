@@ -1,12 +1,31 @@
-<?php
-session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-  header('Location: ../../../index.php');
-  exit;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard | Edit Orphanage</title>
 
-include '../../includes/connection.php';
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+    />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../css/adminlte.min.css" />
+  </head>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <?php include 'header.php';
+      if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+        header('Location: ../../index.php');
+        exit;
+      }
+
+include '../includes/connection.php';
 
 if (!isset($_GET['id'])) {
   header('Location: orphanages.php');
@@ -23,29 +42,7 @@ if (mysqli_num_rows($result) == 0) {
 }
 
 $orphanage = mysqli_fetch_assoc($result);
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Dashboard | Edit Orphanage</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-    />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css" />
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../../css/adminlte.min.css" />
-  </head>
-  <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-      <!-- Navbar -->
-      <?php include 'navbar.php'; ?>
+      ?>
       <!-- /.navbar -->
 
       <!-- Main Sidebar Container -->
@@ -82,7 +79,21 @@ $orphanage = mysqli_fetch_assoc($result);
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                    <form action="../../includes/process-orphanage.php" method="post">
+                    <?php if(isset($_GET['success'])): ?>
+                      <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <?php echo $_GET['success']; ?>
+                      </div>
+                    <?php endif; ?>
+
+                    <?php if(isset($_GET['error'])): ?>
+                      <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <?php echo $_GET['error']; ?>
+                      </div>
+                    <?php endif; ?>
+
+                    <form action="../includes/process-orphanage.php" method="post" enctype="multipart/form-data">
                       <input type="hidden" name="orphanage_id" value="<?php echo $orphanage['id']; ?>">
                       
                       <div class="form-group">
@@ -117,9 +128,38 @@ $orphanage = mysqli_fetch_assoc($result);
                       
                       <div class="form-group">
                         <label for="bank_account">Bank Account Details</label>
-                        <textarea class="form-control" id="bank_account" name="bank_account" rows="2" required><?php echo $orphanage['bank_account']; ?></textarea>
+                        <textarea class="form-control" id="bank_account" name="bank_account" rows="2"><?php echo htmlspecialchars($orphanage['bank_account']); ?></textarea>
                       </div>
-                      
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status">
+                              <option value="active" <?php echo ($orphanage['status'] == 'active') ? 'selected' : ''; ?>>Active</option>
+                              <option value="inactive" <?php echo ($orphanage['status'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="image">Update Image</label>
+                            <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+                            <small class="form-text text-muted">Leave empty to keep current image</small>
+                          </div>
+                        </div>
+                      </div>
+
+                      <?php if (!empty($orphanage['image'])): ?>
+                        <div class="form-group">
+                          <label>Current Image:</label><br>
+                          <img src="../uploads/orphanages/<?php echo htmlspecialchars($orphanage['image']); ?>"
+                               alt="Current orphanage image"
+                               style="max-width: 200px; max-height: 200px;"
+                               class="img-thumbnail">
+                        </div>
+                      <?php endif; ?>
+
                       <div class="form-group">
                         <a href="orphanages.php" class="btn btn-secondary">Cancel</a>
                         <button type="submit" name="update_orphanage" class="btn btn-primary">Update Orphanage</button>
@@ -151,10 +191,10 @@ $orphanage = mysqli_fetch_assoc($result);
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="../../js/adminlte.min.js"></script>
+    <script src="../js/adminlte.min.js"></script>
   </body>
 </html>

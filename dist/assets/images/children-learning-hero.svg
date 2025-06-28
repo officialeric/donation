@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#90EE90;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#228B22;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5DEB3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DEB887;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky Background -->
+  <rect width="1920" height="700" fill="url(#skyGradient)"/>
+  
+  <!-- Ground -->
+  <rect y="700" width="1920" height="380" fill="url(#groundGradient)"/>
+  
+  <!-- School Building -->
+  <rect x="1400" y="400" width="400" height="300" fill="url(#buildingGradient)" stroke="#8B4513" stroke-width="3"/>
+  <polygon points="1400,400 1600,300 1800,400" fill="#8B4513"/>
+  
+  <!-- Windows -->
+  <rect x="1450" y="450" width="60" height="80" fill="#87CEEB" stroke="#654321" stroke-width="2"/>
+  <rect x="1530" y="450" width="60" height="80" fill="#87CEEB" stroke="#654321" stroke-width="2"/>
+  <rect x="1610" y="450" width="60" height="80" fill="#87CEEB" stroke="#654321" stroke-width="2"/>
+  <rect x="1690" y="450" width="60" height="80" fill="#87CEEB" stroke="#654321" stroke-width="2"/>
+  
+  <!-- Door -->
+  <rect x="1580" y="600" width="40" height="100" fill="#654321"/>
+  <circle cx="1610" cy="650" r="3" fill="#FFD700"/>
+  
+  <!-- Trees -->
+  <circle cx="200" cy="600" r="80" fill="#228B22"/>
+  <rect x="190" y="650" width="20" height="50" fill="#8B4513"/>
+  
+  <circle cx="1200" cy="580" r="60" fill="#32CD32"/>
+  <rect x="1192" y="620" width="16" height="80" fill="#8B4513"/>
+  
+  <!-- Children Silhouettes (respectful, dignified representation) -->
+  <!-- Child 1 - Reading -->
+  <g transform="translate(400, 650)">
+    <circle cx="0" cy="-30" r="15" fill="#4A4A4A"/>
+    <rect x="-10" y="-15" width="20" height="35" rx="10" fill="#FF6B6B"/>
+    <rect x="-8" y="20" width="7" height="25" rx="3" fill="#4169E1"/>
+    <rect x="1" y="20" width="7" height="25" rx="3" fill="#4169E1"/>
+    <rect x="-15" y="-10" width="12" height="3" rx="1" fill="#8B4513"/>
+    <rect x="3" y="-10" width="12" height="3" rx="1" fill="#8B4513"/>
+    <!-- Book -->
+    <rect x="-8" y="-5" width="16" height="12" rx="2" fill="#FFF" stroke="#000" stroke-width="1"/>
+  </g>
+  
+  <!-- Child 2 - Playing -->
+  <g transform="translate(600, 660)">
+    <circle cx="0" cy="-25" r="12" fill="#4A4A4A"/>
+    <rect x="-8" y="-13" width="16" height="28" rx="8" fill="#32CD32"/>
+    <rect x="-6" y="15" width="5" height="20" rx="2" fill="#8B4513"/>
+    <rect x="1" y="15" width="5" height="20" rx="2" fill="#8B4513"/>
+    <rect x="-12" y="-8" width="10" height="3" rx="1" fill="#8B4513"/>
+    <rect x="2" y="-8" width="10" height="3" rx="1" fill="#8B4513"/>
+    <!-- Ball -->
+    <circle cx="15" cy="-10" r="8" fill="#FF4500"/>
+  </g>
+  
+  <!-- Child 3 - Learning -->
+  <g transform="translate(800, 655)">
+    <circle cx="0" cy="-28" r="14" fill="#4A4A4A"/>
+    <rect x="-9" y="-14" width="18" height="32" rx="9" fill="#9370DB"/>
+    <rect x="-7" y="18" width="6" height="22" rx="3" fill="#2F4F4F"/>
+    <rect x="1" y="18" width="6" height="22" rx="3" fill="#2F4F4F"/>
+    <rect x="-14" y="-9" width="11" height="3" rx="1" fill="#8B4513"/>
+    <rect x="3" y="-9" width="11" height="3" rx="1" fill="#8B4513"/>
+    <!-- Pencil -->
+    <rect x="12" y="-15" width="2" height="20" rx="1" fill="#FFD700"/>
+    <polygon points="12,-17 14,-17 13,-20" fill="#FF6347"/>
+  </g>
+  
+  <!-- Child 4 - Group activity -->
+  <g transform="translate(1000, 650)">
+    <circle cx="0" cy="-30" r="15" fill="#4A4A4A"/>
+    <rect x="-10" y="-15" width="20" height="35" rx="10" fill="#FF69B4"/>
+    <rect x="-8" y="20" width="7" height="25" rx="3" fill="#4B0082"/>
+    <rect x="1" y="20" width="7" height="25" rx="3" fill="#4B0082"/>
+    <rect x="-15" y="-10" width="12" height="3" rx="1" fill="#8B4513"/>
+    <rect x="3" y="-10" width="12" height="3" rx="1" fill="#8B4513"/>
+  </g>
+  
+  <!-- Educational Elements -->
+  <!-- Blackboard -->
+  <rect x="300" y="500" width="120" height="80" fill="#2F4F4F" stroke="#8B4513" stroke-width="4"/>
+  <text x="360" y="530" font-family="Arial, sans-serif" font-size="16" fill="#FFF" text-anchor="middle">ABC</text>
+  <text x="360" y="550" font-family="Arial, sans-serif" font-size="16" fill="#FFF" text-anchor="middle">123</text>
+  <text x="360" y="570" font-family="Arial, sans-serif" font-size="12" fill="#FFF" text-anchor="middle">Learning</text>
+  
+  <!-- Books on ground -->
+  <rect x="500" y="680" width="15" height="20" rx="2" fill="#FF6B6B"/>
+  <rect x="520" y="680" width="15" height="20" rx="2" fill="#4169E1"/>
+  <rect x="540" y="680" width="15" height="20" rx="2" fill="#32CD32"/>
+  
+  <!-- Playground equipment -->
+  <rect x="1100" y="620" width="8" height="80" fill="#8B4513"/>
+  <rect x="1080" y="600" width="50" height="8" fill="#8B4513"/>
+  <rect x="1070" y="580" width="8" height="40" fill="#8B4513"/>
+  <rect x="1122" y="580" width="8" height="40" fill="#8B4513"/>
+  
+  <!-- Clouds -->
+  <ellipse cx="300" cy="200" rx="60" ry="30" fill="#FFF" opacity="0.8"/>
+  <ellipse cx="280" cy="180" rx="40" ry="25" fill="#FFF" opacity="0.8"/>
+  <ellipse cx="320" cy="180" rx="45" ry="28" fill="#FFF" opacity="0.8"/>
+  
+  <ellipse cx="1500" cy="150" rx="70" ry="35" fill="#FFF" opacity="0.8"/>
+  <ellipse cx="1480" cy="130" rx="45" ry="28" fill="#FFF" opacity="0.8"/>
+  <ellipse cx="1520" cy="130" rx="50" ry="30" fill="#FFF" opacity="0.8"/>
+  
+  <!-- Sun -->
+  <circle cx="1700" cy="200" r="50" fill="#FFD700" opacity="0.9"/>
+  <g stroke="#FFD700" stroke-width="4" opacity="0.7">
+    <line x1="1700" y1="100" x2="1700" y2="120"/>
+    <line x1="1700" y1="280" x2="1700" y2="300"/>
+    <line x1="1600" y1="200" x2="1620" y2="200"/>
+    <line x1="1780" y1="200" x2="1800" y2="200"/>
+    <line x1="1635" y1="135" x2="1650" y2="150"/>
+    <line x1="1750" y1="250" x2="1765" y2="265"/>
+    <line x1="1765" y1="135" x2="1750" y2="150"/>
+    <line x1="1650" y1="250" x2="1635" y2="265"/>
+  </g>
+  
+  <!-- Inspirational elements -->
+  <text x="960" y="100" font-family="Arial, sans-serif" font-size="24" fill="#4A4A4A" text-anchor="middle" opacity="0.3">Education • Hope • Future</text>
+  
+  <!-- Subtle pattern overlay for texture -->
+  <defs>
+    <pattern id="texture" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.5" fill="#FFF" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#texture)"/>
+</svg>

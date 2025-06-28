@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Gradients for modern look -->
+    <linearGradient id="handGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="childGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fa709a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fee140;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Drop shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="white" stroke="url(#handGradient)" stroke-width="3" filter="url(#dropshadow)"/>
+  
+  <!-- Protective hands (left hand) -->
+  <path d="M 30 120 Q 25 110 30 100 Q 35 95 45 100 Q 50 105 55 115 L 65 130 Q 70 140 75 150 Q 80 160 85 165 Q 90 170 95 165 Q 100 160 95 150 L 85 130 Q 80 120 75 110 Q 70 100 65 95 Q 60 90 55 95 Q 50 100 45 105 L 35 115 Q 30 120 30 120 Z" 
+        fill="url(#handGradient)" opacity="0.9"/>
+  
+  <!-- Protective hands (right hand) -->
+  <path d="M 170 120 Q 175 110 170 100 Q 165 95 155 100 Q 150 105 145 115 L 135 130 Q 130 140 125 150 Q 120 160 115 165 Q 110 170 105 165 Q 100 160 105 150 L 115 130 Q 120 120 125 110 Q 130 100 135 95 Q 140 90 145 95 Q 150 100 155 105 L 165 115 Q 170 120 170 120 Z" 
+        fill="url(#handGradient)" opacity="0.9"/>
+  
+  <!-- Children figures -->
+  <!-- Child 1 (center) -->
+  <circle cx="100" cy="90" r="12" fill="url(#childGradient)"/>
+  <ellipse cx="100" cy="115" rx="15" ry="25" fill="url(#childGradient)"/>
+  <circle cx="95" cy="87" r="2" fill="white"/>
+  <circle cx="105" cy="87" r="2" fill="white"/>
+  <path d="M 95 95 Q 100 98 105 95" stroke="white" stroke-width="1.5" fill="none"/>
+  
+  <!-- Child 2 (left) -->
+  <circle cx="75" cy="95" r="10" fill="url(#childGradient)" opacity="0.8"/>
+  <ellipse cx="75" cy="115" rx="12" ry="20" fill="url(#childGradient)" opacity="0.8"/>
+  <circle cx="72" cy="93" r="1.5" fill="white"/>
+  <circle cx="78" cy="93" r="1.5" fill="white"/>
+  <path d="M 72 98 Q 75 100 78 98" stroke="white" stroke-width="1" fill="none"/>
+  
+  <!-- Child 3 (right) -->
+  <circle cx="125" cy="95" r="10" fill="url(#childGradient)" opacity="0.8"/>
+  <ellipse cx="125" cy="115" rx="12" ry="20" fill="url(#childGradient)" opacity="0.8"/>
+  <circle cx="122" cy="93" r="1.5" fill="white"/>
+  <circle cx="128" cy="93" r="1.5" fill="white"/>
+  <path d="M 122 98 Q 125 100 128 98" stroke="white" stroke-width="1" fill="none"/>
+  
+  <!-- Heart symbol above -->
+  <path d="M 100 60 C 95 55, 85 55, 85 65 C 85 75, 100 85, 100 85 C 100 85, 115 75, 115 65 C 115 55, 105 55, 100 60 Z" 
+        fill="url(#heartGradient)" opacity="0.9"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="60" cy="70" r="3" fill="url(#heartGradient)" opacity="0.6"/>
+  <circle cx="140" cy="70" r="3" fill="url(#heartGradient)" opacity="0.6"/>
+  <circle cx="50" cy="140" r="2" fill="url(#handGradient)" opacity="0.5"/>
+  <circle cx="150" cy="140" r="2" fill="url(#handGradient)" opacity="0.5"/>
+  
+  <!-- Text curve path (hidden) -->
+  <defs>
+    <path id="textcircle" d="M 100,180 A 80,80 0 0,1 100,20"/>
+  </defs>
+  
+  <!-- Optional text along curve -->
+  <text font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="url(#handGradient)">
+    <textPath href="#textcircle" startOffset="25%">
+      CARING • HOPE • LOVE
+    </textPath>
+  </text>
+</svg>

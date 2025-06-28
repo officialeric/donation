@@ -1,8 +1,8 @@
 <?php
 
 $server = 'localhost' ;
-$user  = 'spancial';
-$password = '';
+$user  = 'root';
+$password = 'password';
 $db_name = 'donation';
 
 //connecting to database

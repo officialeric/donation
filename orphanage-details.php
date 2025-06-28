@@ -124,6 +124,89 @@
                 </div>
               </div>
 
+              <!-- Current Campaigns Section -->
+              <?php
+                $campaigns_sql = "SELECT * FROM campaigns WHERE orphanage_id = '" . $orphanage['id'] . "' AND status = 'active' ORDER BY priority DESC, deadline ASC";
+                $campaigns_result = mysqli_query($db, $campaigns_sql);
+
+                if (mysqli_num_rows($campaigns_result) > 0):
+              ?>
+              <div class="mt-4">
+                <h4 class="text-primary mb-3">
+                  <i class="bi bi-megaphone me-2"></i>Current Campaigns
+                </h4>
+                <div class="row">
+                  <?php while($campaign = mysqli_fetch_assoc($campaigns_result)):
+                    $progress = ($campaign['current_amount'] / $campaign['target_amount']) * 100;
+                    $progress_class = $progress >= 75 ? 'success' : ($progress >= 50 ? 'warning' : 'danger');
+                    $priority_class = $campaign['priority'] == 'urgent' ? 'danger' : ($campaign['priority'] == 'high' ? 'warning' : ($campaign['priority'] == 'medium' ? 'info' : 'secondary'));
+                    $days_remaining = (strtotime($campaign['deadline']) - time()) / (60 * 60 * 24);
+                  ?>
+                  <div class="col-md-6 mb-3">
+                    <div class="card h-100 border-<?php echo $priority_class; ?>">
+                      <div class="card-header bg-<?php echo $priority_class; ?> text-white">
+                        <h6 class="card-title mb-0">
+                          <?php echo htmlspecialchars($campaign['title']); ?>
+                          <span class="badge badge-light float-end"><?php echo ucfirst($campaign['priority']); ?></span>
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <p class="card-text"><?php echo htmlspecialchars(substr($campaign['description'], 0, 150)) . (strlen($campaign['description']) > 150 ? '...' : ''); ?></p>
+
+                        <div class="mb-3">
+                          <div class="d-flex justify-content-between mb-1">
+                            <small>Progress</small>
+                            <small><?php echo round($progress, 1); ?>%</small>
+                          </div>
+                          <div class="progress">
+                            <div class="progress-bar bg-<?php echo $progress_class; ?>" style="width: <?php echo $progress; ?>%"></div>
+                          </div>
+                        </div>
+
+                        <div class="row text-center">
+                          <div class="col-6">
+                            <strong class="text-<?php echo $progress_class; ?>">$<?php echo number_format($campaign['current_amount'], 0); ?></strong>
+                            <br><small class="text-muted">Raised</small>
+                          </div>
+                          <div class="col-6">
+                            <strong>$<?php echo number_format($campaign['target_amount'], 0); ?></strong>
+                            <br><small class="text-muted">Goal</small>
+                          </div>
+                        </div>
+
+                        <div class="mt-2 text-center">
+                          <small class="text-muted">
+                            <i class="bi bi-calendar"></i>
+                            <?php
+                              if ($days_remaining > 0) {
+                                echo ceil($days_remaining) . " days left";
+                              } elseif ($days_remaining == 0) {
+                                echo "Ends today";
+                              } else {
+                                echo "Campaign ended";
+                              }
+                            ?>
+                          </small>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <?php if(isset($_SESSION['user_id'])): ?>
+                          <a href="make-donation.php?orphanage_id=<?php echo $orphanage['id']; ?>&campaign_id=<?php echo $campaign['id']; ?>" class="btn btn-<?php echo $priority_class; ?> btn-sm w-100">
+                            <i class="bi bi-heart-fill me-1"></i>Donate to This Campaign
+                          </a>
+                        <?php else: ?>
+                          <a href="register.php?redirect=make-donation.php?orphanage_id=<?php echo $orphanage['id']; ?>&campaign_id=<?php echo $campaign['id']; ?>" class="btn btn-<?php echo $priority_class; ?> btn-sm w-100">
+                            <i class="bi bi-heart-fill me-1"></i>Register to Donate
+                          </a>
+                        <?php endif; ?>
+                      </div>
+                    </div>
+                  </div>
+                  <?php endwhile; ?>
+                </div>
+              </div>
+              <?php endif; ?>
+
               <div class="mt-4 text-center">
                 <?php if(isset($_SESSION['user_id'])): ?>
                   <a href="make-donation.php?orphanage_id=<?php echo $orphanage['id']; ?>" class="btn btn-primary btn-lg">

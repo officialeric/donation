@@ -4,10 +4,10 @@
           <!--begin::Brand Link-->
           <a href="index.php" class="brand-link">
             <!--begin::Brand Icon-->
-            <i class="bi bi-heart-fill brand-image text-danger" style="font-size: 2rem; margin-right: 0.5rem;"></i>
+            <img src="../../images/logo-simple.svg" alt="TumainiFuraha Logo" class="brand-image" style="width: 2rem; height: 2rem; margin-right: 0.5rem;">
             <!--end::Brand Icon-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-bold">Donation Platform</span>
+            <span class="brand-text fw-bold">TumainiFuraha</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
