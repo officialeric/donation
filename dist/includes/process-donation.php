@@ -10,6 +10,11 @@ require_once 'payment_config.php';
 require_once 'email_notifications.php';
 require_once 'security_validator.php';
 
+// Include payment gateway integrations
+require_once 'stripe_integration.php';
+require_once 'paypal_integration.php';
+require_once 'mpesa_integration.php';
+
 // Security checks
 if (!SecurityValidator::validateSession()) {
     header('Location: ../../login.php');
@@ -205,65 +210,145 @@ function processPayment($payment_method, $transaction_id, $amount, $post_data) {
 }
 
 /**
- * Process credit card payment (Stripe integration)
+ * Process credit card payment (Real Stripe integration)
  */
 function processCreditCardPayment($transaction_id, $amount, $post_data) {
-    // Validate credit card data
-    $card_number = PaymentConfig::sanitizeCardNumber($post_data['card_number'] ?? '');
-    $card_holder_name = trim($post_data['card_holder_name'] ?? '');
-    $card_expiry = $post_data['card_expiry'] ?? '';
-    $card_cvv = $post_data['card_cvv'] ?? '';
-    
-    if (!PaymentConfig::validateCardNumber($card_number)) {
-        return ['success' => false, 'error' => 'Invalid credit card number'];
+    // Validate credit card data first
+    $card_errors = SecurityValidator::validateCreditCardData($post_data);
+    if (!empty($card_errors)) {
+        return ['success' => false, 'error' => implode('. ', $card_errors)];
     }
-    
-    if (!$card_holder_name) {
-        return ['success' => false, 'error' => 'Cardholder name is required'];
+
+    try {
+        // Initialize Stripe integration
+        $stripe = new StripeIntegration();
+
+        // Prepare payment data
+        $expiry_parts = explode('/', $post_data['card_expiry']);
+        $payment_data = [
+            'transaction_id' => $transaction_id,
+            'amount' => $amount,
+            'currency' => 'USD',
+            'card_number' => PaymentConfig::sanitizeCardNumber($post_data['card_number']),
+            'exp_month' => intval($expiry_parts[0]),
+            'exp_year' => intval('20' . $expiry_parts[1]), // Convert YY to YYYY
+            'cvc' => $post_data['card_cvv'],
+            'cardholder_name' => $post_data['card_holder_name'],
+            'orphanage_id' => $_POST['orphanage_id'] ?? null,
+            'donor_id' => $_SESSION['user_id'] ?? null,
+            'campaign_id' => $_POST['campaign_id'] ?? null
+        ];
+
+        // Process payment through Stripe
+        $result = $stripe->processPayment($payment_data);
+
+        if ($result['success']) {
+            return [
+                'success' => true,
+                'gateway_transaction_id' => $result['transaction_id'],
+                'data' => [
+                    'card_type' => $result['brand'] ?? 'unknown',
+                    'last_four' => $result['last_four'] ?? '****',
+                    'status' => 'completed'
+                ]
+            ];
+        } else {
+            return [
+                'success' => false,
+                'error' => $result['error'] ?? 'Payment processing failed'
+            ];
+        }
+
+    } catch (Exception $e) {
+        error_log('Stripe payment error: ' . $e->getMessage());
+        return [
+            'success' => false,
+            'error' => 'Payment processing failed. Please try again.'
+        ];
     }
-    
-    $expiry_parts = explode('/', $card_expiry);
-    if (count($expiry_parts) !== 2 || !PaymentConfig::validateExpiryDate($expiry_parts[0], $expiry_parts[1])) {
-        return ['success' => false, 'error' => 'Invalid expiry date'];
-    }
-    
-    $card_type = PaymentConfig::detectCardType($card_number);
-    if (!PaymentConfig::validateCVV($card_cvv, $card_type)) {
-        return ['success' => false, 'error' => 'Invalid CVV'];
-    }
-    
-    // In a real implementation, you would integrate with Stripe here
-    // For demo purposes, we'll simulate a successful payment
-    return [
-        'success' => true,
-        'gateway_transaction_id' => 'stripe_' . uniqid(),
-        'data' => [
-            'card_type' => $card_type,
-            'last_four' => substr($card_number, -4),
-            'status' => 'completed'
-        ]
-    ];
 }
 
 /**
- * Process PayPal payment
+ * Process PayPal payment (Real PayPal integration)
  */
 function processPayPalPayment($transaction_id, $amount, $post_data) {
-    $paypal_email = filter_var($post_data['paypal_email'] ?? '', FILTER_VALIDATE_EMAIL);
-    
-    if (!$paypal_email) {
-        return ['success' => false, 'error' => 'Invalid PayPal email address'];
+    // Validate PayPal data
+    $paypal_errors = SecurityValidator::validatePayPalData($post_data);
+    if (!empty($paypal_errors)) {
+        return ['success' => false, 'error' => implode('. ', $paypal_errors)];
     }
-    
-    // In a real implementation, you would integrate with PayPal API here
-    return [
-        'success' => true,
-        'gateway_transaction_id' => 'paypal_' . uniqid(),
-        'data' => [
-            'paypal_email' => $paypal_email,
-            'status' => 'completed'
-        ]
-    ];
+
+    try {
+        // Initialize PayPal integration
+        $paypal = new PayPalIntegration();
+
+        // Get orphanage details for payment description
+        global $db;
+        $orphanage_id = $_POST['orphanage_id'] ?? null;
+        $campaign_id = $_POST['campaign_id'] ?? null;
+
+        $stmt = $db->prepare("SELECT name FROM orphanages WHERE id = ?");
+        $stmt->bind_param('i', $orphanage_id);
+        $stmt->execute();
+        $orphanage_result = $stmt->get_result();
+        $orphanage = $orphanage_result->fetch_assoc();
+
+        $campaign_title = '';
+        if ($campaign_id) {
+            $stmt = $db->prepare("SELECT title FROM campaigns WHERE id = ?");
+            $stmt->bind_param('i', $campaign_id);
+            $stmt->execute();
+            $campaign_result = $stmt->get_result();
+            $campaign = $campaign_result->fetch_assoc();
+            $campaign_title = $campaign['title'] ?? '';
+        }
+
+        // Prepare payment data
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'];
+        $base_url = $protocol . '://' . $host;
+
+        // For localhost development, use http
+        if (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+            $base_url = 'http://' . $host;
+        }
+
+        $payment_data = [
+            'amount' => floatval($amount),
+            'currency' => 'USD',
+            'transaction_id' => $transaction_id,
+            'orphanage_name' => $orphanage['name'] ?? 'Unknown Orphanage',
+            'campaign_title' => $campaign_title,
+            'return_url' => $base_url . '/donation/paypal-return.php?transaction_id=' . urlencode($transaction_id),
+            'cancel_url' => $base_url . '/donation/make-donation.php?orphanage_id=' . $orphanage_id . '&error=' . urlencode('Payment cancelled')
+        ];
+
+        // Create PayPal payment
+        $result = $paypal->createPayment($payment_data);
+
+        if ($result['success']) {
+            // Store PayPal payment ID for later execution
+            $stmt = $db->prepare("UPDATE donations SET gateway_payment_id = ? WHERE transaction_id = ?");
+            $stmt->bind_param('ss', $result['payment_id'], $transaction_id);
+            $stmt->execute();
+
+            // Redirect to PayPal for approval
+            header('Location: ' . $result['approval_url']);
+            exit;
+        } else {
+            return [
+                'success' => false,
+                'error' => $result['error'] ?? 'PayPal payment creation failed'
+            ];
+        }
+
+    } catch (Exception $e) {
+        error_log('PayPal payment error: ' . $e->getMessage());
+        return [
+            'success' => false,
+            'error' => 'Payment processing failed. Please try again.'
+        ];
+    }
 }
 
 /**
@@ -290,23 +375,69 @@ function processBankTransferPayment($transaction_id, $amount, $post_data) {
 }
 
 /**
- * Process M-Pesa payment
+ * Process M-Pesa payment (Real M-Pesa integration)
  */
 function processMPesaPayment($transaction_id, $amount, $post_data) {
-    $mpesa_phone = preg_replace('/[^0-9]/', '', $post_data['mpesa_phone'] ?? '');
-    
-    if (strlen($mpesa_phone) !== 10 || !preg_match('/^07/', $mpesa_phone)) {
-        return ['success' => false, 'error' => 'Invalid M-Pesa phone number'];
+    // Validate M-Pesa data
+    $mpesa_errors = SecurityValidator::validateMPesaData($post_data);
+    if (!empty($mpesa_errors)) {
+        return ['success' => false, 'error' => implode('. ', $mpesa_errors)];
     }
-    
-    // In a real implementation, you would integrate with M-Pesa API here
-    return [
-        'success' => true,
-        'gateway_transaction_id' => 'mpesa_' . uniqid(),
-        'data' => [
-            'phone_number' => $mpesa_phone,
-            'status' => 'completed'
-        ]
-    ];
+
+    try {
+        // Initialize M-Pesa integration
+        $mpesa = new MPesaIntegration();
+
+        // Get orphanage details
+        global $db;
+        $orphanage_id = $_POST['orphanage_id'] ?? null;
+
+        $stmt = $db->prepare("SELECT name FROM orphanages WHERE id = ?");
+        $stmt->bind_param('i', $orphanage_id);
+        $stmt->execute();
+        $orphanage_result = $stmt->get_result();
+        $orphanage = $orphanage_result->fetch_assoc();
+
+        // Prepare payment data
+        $payment_data = [
+            'amount' => $amount,
+            'phone' => $post_data['mpesa_phone'],
+            'transaction_id' => $transaction_id,
+            'orphanage_name' => $orphanage['name'] ?? 'Unknown Orphanage',
+            'callback_url' => 'https://' . $_SERVER['HTTP_HOST'] . '/mpesa-callback.php'
+        ];
+
+        // Initiate STK Push
+        $result = $mpesa->initiateSTKPush($payment_data);
+
+        if ($result['success']) {
+            // Store checkout request ID for status tracking
+            $stmt = $db->prepare("UPDATE donations SET checkout_request_id = ? WHERE transaction_id = ?");
+            $stmt->bind_param('ss', $result['checkout_request_id'], $transaction_id);
+            $stmt->execute();
+
+            return [
+                'success' => true,
+                'gateway_transaction_id' => $result['checkout_request_id'],
+                'data' => [
+                    'phone_number' => $post_data['mpesa_phone'],
+                    'status' => 'pending',
+                    'message' => 'Please check your phone for M-Pesa prompt'
+                ]
+            ];
+        } else {
+            return [
+                'success' => false,
+                'error' => $result['error'] ?? 'M-Pesa payment initiation failed'
+            ];
+        }
+
+    } catch (Exception $e) {
+        error_log('M-Pesa payment error: ' . $e->getMessage());
+        return [
+            'success' => false,
+            'error' => 'Payment processing failed. Please try again.'
+        ];
+    }
 }
 ?>

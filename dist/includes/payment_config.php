@@ -10,28 +10,28 @@ class PaymentConfig {
     const PAYMENT_GATEWAYS = [
         'stripe' => [
             'name' => 'Stripe',
-            'test_mode' => true,
-            'public_key' => 'pk_test_...',  // Replace with actual Stripe keys
-            'secret_key' => 'sk_test_...',
-            'webhook_secret' => 'whsec_...',
+            'test_mode' => true, // Set to false for production
+            'public_key' => 'pk_test_51234567890abcdef...',  // Replace with your Stripe publishable key
+            'secret_key' => 'sk_test_51234567890abcdef...',  // Replace with your Stripe secret key
+            'webhook_secret' => 'whsec_1234567890abcdef...',  // Replace with your webhook secret
             'supported_methods' => ['credit_card'],
-            'currencies' => ['USD', 'EUR', 'GBP']
+            'currencies' => ['USD', 'EUR', 'GBP', 'KES']
         ],
         'paypal' => [
             'name' => 'PayPal',
-            'test_mode' => true,
-            'client_id' => 'your_paypal_client_id',
-            'client_secret' => 'your_paypal_client_secret',
+            'test_mode' => true, // Set to false for production
+            'client_id' => 'AQoOgFr6UMuhXnB-fTjj6gL0WSHXtpQjHi472rAPAqBm86nQidRkRPCWN-qSmCxYX8PRUm639M2Osvn8',  // Replace with your PayPal client ID
+            'client_secret' => 'EG_Rd7XFi_4TBd79cLepRHtRVyw9QHkUN025Qc6e1JeNUMrUp7Oy41qwUgVOaFqar0YLwliLhv38c5uU',  // Replace with your PayPal client secret
             'supported_methods' => ['paypal'],
             'currencies' => ['USD', 'EUR', 'GBP']
         ],
         'mpesa' => [
             'name' => 'M-Pesa',
-            'test_mode' => true,
-            'consumer_key' => 'your_mpesa_consumer_key',
-            'consumer_secret' => 'your_mpesa_consumer_secret',
-            'business_short_code' => '174379',
-            'passkey' => 'your_mpesa_passkey',
+            'test_mode' => true, // Set to false for production
+            'consumer_key' => 'YourMPesaConsumerKey123',  // Replace with your M-Pesa consumer key
+            'consumer_secret' => 'YourMPesaConsumerSecret123',  // Replace with your M-Pesa consumer secret
+            'business_short_code' => '174379',  // Replace with your business short code
+            'passkey' => 'YourMPesaPasskey123456789',  // Replace with your M-Pesa passkey
             'supported_methods' => ['mpesa'],
             'currencies' => ['KES']
         ]

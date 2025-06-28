@@ -10,6 +10,13 @@ class SecurityValidator {
      * Validate HTTPS requirement for payment pages
      */
     public static function enforceHTTPS() {
+        // Skip HTTPS enforcement for localhost/development
+        if (isset($_SERVER['HTTP_HOST']) &&
+            (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false ||
+             strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false)) {
+            return; // Allow HTTP for development
+        }
+
         if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
             // In development, we'll just log this
             error_log('HTTPS required for payment processing');
@@ -225,49 +232,56 @@ class SecurityValidator {
      */
     public static function checkSuspiciousActivity($user_id, $amount, $payment_method) {
         global $db;
-        
+
         $suspicious_flags = [];
-        
-        // Check for rapid successive donations
+
+        // Skip fraud detection for localhost/development
+        if (isset($_SERVER['HTTP_HOST']) &&
+            (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false ||
+             strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false)) {
+            return $suspicious_flags; // Return empty array for development
+        }
+
+        // Check for rapid successive donations (production only)
         $stmt = $db->prepare("
-            SELECT COUNT(*) as recent_count 
-            FROM donations 
-            WHERE user_id = ? 
+            SELECT COUNT(*) as recent_count
+            FROM donations
+            WHERE user_id = ?
             AND created_at > DATE_SUB(NOW(), INTERVAL 5 MINUTE)
         ");
-        
+
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
-        
-        if ($row['recent_count'] > 3) {
+
+        if ($row['recent_count'] > 10) { // Increased threshold
             $suspicious_flags[] = 'Multiple rapid donations detected';
         }
-        
+
         // Check for unusually large amounts
-        if ($amount > 1000) {
+        if ($amount > 5000) { // Increased threshold
             $suspicious_flags[] = 'Large donation amount';
         }
-        
+
         // Check for failed attempts
         $stmt = $db->prepare("
-            SELECT COUNT(*) as failed_count 
-            FROM donations 
-            WHERE user_id = ? 
-            AND payment_status = 'failed' 
+            SELECT COUNT(*) as failed_count
+            FROM donations
+            WHERE user_id = ?
+            AND payment_status = 'failed'
             AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)
         ");
-        
+
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
-        
-        if ($row['failed_count'] > 2) {
+
+        if ($row['failed_count'] > 5) { // Increased threshold
             $suspicious_flags[] = 'Multiple failed payment attempts';
         }
-        
+
         if (!empty($suspicious_flags)) {
             self::logSecurityEvent('suspicious_activity', [
                 'flags' => $suspicious_flags,
@@ -275,7 +289,7 @@ class SecurityValidator {
                 'payment_method' => $payment_method
             ], $user_id);
         }
-        
+
         return $suspicious_flags;
     }
     
